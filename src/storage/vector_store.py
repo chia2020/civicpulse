@@ -3,15 +3,35 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-import sqlite3
-from pathlib import Path
-from typing import Iterable
+import os
+from typing import Any, Iterable, Protocol
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 import pandas as pd
 
+from src.config import load_environment
 
-DEFAULT_DB_PATH = Path("storage/civicpulse_vector.db")
+
 EMBEDDING_DIMENSIONS = 128
+DEFAULT_TABLE_NAME = "issues"
+
+
+class MissingSupabaseConfig(RuntimeError):
+    """Raised when the cloud database environment variables are not configured."""
+
+
+class SupabaseClientProtocol(Protocol):
+    def request(
+        self,
+        method: str,
+        table: str,
+        params: dict[str, str] | None = None,
+        payload: Any | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> Any:
+        ...
 
 
 def _tokenize(text: str) -> list[str]:
@@ -40,92 +60,127 @@ def cosine_similarity(left: list[float], right: list[float]) -> float:
     return sum(a * b for a, b in zip(left, right))
 
 
+def _searchable_text(issue: dict[str, object]) -> str:
+    return " ".join(
+        str(issue.get(field, ""))
+        for field in ("title", "area", "zone", "category", "description", "source")
+    )
+
+
+def _supabase_api_key() -> str | None:
+    return (
+        os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        or os.getenv("SUPABASE_API_KEY")
+        or os.getenv("SUPABASE_ANON_KEY")
+    )
+
+
+class SupabaseRestClient:
+    def __init__(self, url: str, api_key: str, timeout_seconds: int = 30) -> None:
+        self.url = url.rstrip("/")
+        self.api_key = api_key
+        self.timeout_seconds = timeout_seconds
+
+    @classmethod
+    def from_environment(cls) -> "SupabaseRestClient":
+        load_environment()
+        url = os.getenv("SUPABASE_URL") or os.getenv("CIVICPULSE_SUPABASE_URL")
+        api_key = _supabase_api_key()
+        if not url or not api_key:
+            raise MissingSupabaseConfig(
+                "Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY, SUPABASE_API_KEY, "
+                "or SUPABASE_ANON_KEY in .env."
+            )
+        timeout = int(os.getenv("SUPABASE_TIMEOUT_SECONDS", "30"))
+        return cls(url=url, api_key=api_key, timeout_seconds=timeout)
+
+    def request(
+        self,
+        method: str,
+        table: str,
+        params: dict[str, str] | None = None,
+        payload: Any | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> Any:
+        query = f"?{urlencode(params)}" if params else ""
+        url = f"{self.url}/rest/v1/{table}{query}"
+        body = None if payload is None else json.dumps(payload).encode("utf-8")
+        request_headers = {
+            "apikey": self.api_key,
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        if headers:
+            request_headers.update(headers)
+
+        request = Request(url, data=body, headers=request_headers, method=method)
+        try:
+            with urlopen(request, timeout=self.timeout_seconds) as response:
+                response_body = response.read().decode("utf-8")
+        except HTTPError as exc:
+            details = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Supabase {method} failed: {exc.code} {details}") from exc
+        except URLError as exc:
+            raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+
+        if not response_body:
+            return None
+        return json.loads(response_body)
+
+
 class CivicVectorStore:
-    def __init__(self, path: Path = DEFAULT_DB_PATH) -> None:
-        self.path = path
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._initialize()
+    """Cloud-backed issue store with deterministic embeddings for local ranking."""
 
-    def _connect(self) -> sqlite3.Connection:
-        connection = sqlite3.connect(self.path)
-        connection.row_factory = sqlite3.Row
-        return connection
-
-    def _initialize(self) -> None:
-        with self._connect() as connection:
-            connection.execute(
-                """
-                CREATE TABLE IF NOT EXISTS issues (
-                    id TEXT PRIMARY KEY,
-                    document TEXT NOT NULL,
-                    embedding TEXT NOT NULL,
-                    impact_score REAL NOT NULL,
-                    post_date TEXT NOT NULL,
-                    traction_date TEXT NOT NULL,
-                    zone TEXT NOT NULL,
-                    category TEXT NOT NULL,
-                    source TEXT NOT NULL
-                )
-                """
-            )
-            connection.execute(
-                """
-                CREATE INDEX IF NOT EXISTS idx_issues_dashboard
-                ON issues (impact_score DESC, traction_date DESC, post_date DESC)
-                """
-            )
+    def __init__(
+        self,
+        client: SupabaseClientProtocol | None = None,
+        table_name: str | None = None,
+    ) -> None:
+        load_environment()
+        self.client = client or SupabaseRestClient.from_environment()
+        self.table_name = table_name or os.getenv("SUPABASE_TABLE", DEFAULT_TABLE_NAME)
 
     def upsert_issues(self, issues: Iterable[dict[str, object]]) -> int:
-        count = 0
-        with self._connect() as connection:
-            for issue in issues:
-                document = json.dumps(issue, sort_keys=True)
-                searchable_text = " ".join(
-                    str(issue.get(field, ""))
-                    for field in ("title", "area", "zone", "category", "description", "source")
-                )
-                connection.execute(
-                    """
-                    INSERT INTO issues (
-                        id, document, embedding, impact_score, post_date,
-                        traction_date, zone, category, source
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    ON CONFLICT(id) DO UPDATE SET
-                        document = excluded.document,
-                        embedding = excluded.embedding,
-                        impact_score = excluded.impact_score,
-                        post_date = excluded.post_date,
-                        traction_date = excluded.traction_date,
-                        zone = excluded.zone,
-                        category = excluded.category,
-                        source = excluded.source
-                    """,
-                    (
-                        str(issue["id"]),
-                        document,
-                        json.dumps(embed_text(searchable_text)),
-                        float(issue["impact_score"]),
-                        str(issue["post_date"]),
-                        str(issue["traction_date"]),
-                        str(issue["zone"]),
-                        str(issue["category"]),
-                        str(issue.get("source", "unknown")),
-                    ),
-                )
-                count += 1
-        return count
+        records = []
+        for issue in issues:
+            document = dict(issue)
+            records.append(
+                {
+                    "id": str(issue["id"]),
+                    "document": document,
+                    "embedding": embed_text(_searchable_text(document)),
+                    "impact_score": float(issue["impact_score"]),
+                    "post_date": str(issue["post_date"]),
+                    "traction_date": str(issue["traction_date"]),
+                    "zone": str(issue["zone"]),
+                    "category": str(issue["category"]),
+                    "source": str(issue.get("source", "unknown")),
+                }
+            )
+
+        if not records:
+            return 0
+
+        self.client.request(
+            "POST",
+            self.table_name,
+            params={"on_conflict": "id"},
+            payload=records,
+            headers={"Prefer": "resolution=merge-duplicates,return=minimal"},
+        )
+        return len(records)
 
     def fetch_all(self) -> pd.DataFrame:
-        with self._connect() as connection:
-            rows = connection.execute(
-                """
-                SELECT document
-                FROM issues
-                ORDER BY impact_score DESC, traction_date DESC
-                """
-            ).fetchall()
-        return pd.DataFrame([json.loads(row["document"]) for row in rows])
+        rows = self.client.request(
+            "GET",
+            self.table_name,
+            params={
+                "select": "document",
+                "order": "impact_score.desc,traction_date.desc,post_date.desc",
+            },
+        )
+        return pd.DataFrame([row["document"] for row in rows or []])
 
     def search(self, query: str, limit: int = 50) -> pd.DataFrame:
         query = query.strip()
@@ -134,21 +189,21 @@ class CivicVectorStore:
 
         query_tokens = set(_tokenize(query))
         query_embedding = embed_text(query)
-        with self._connect() as connection:
-            rows = connection.execute("SELECT document, embedding FROM issues").fetchall()
+        rows = self.client.request(
+            "GET",
+            self.table_name,
+            params={"select": "document,embedding"},
+        )
 
         scored = []
-        for row in rows:
-            issue = json.loads(row["document"])
-            searchable_text = " ".join(
-                str(issue.get(field, ""))
-                for field in ("title", "area", "zone", "category", "description", "source")
-            )
+        for row in rows or []:
+            issue = dict(row["document"])
+            searchable_text = _searchable_text(issue)
             text_tokens = set(_tokenize(searchable_text))
             token_overlap = len(query_tokens & text_tokens)
             token_score = token_overlap / max(len(query_tokens), 1)
             substring_score = 1.0 if query.lower() in searchable_text.lower() else 0.0
-            vector_score = cosine_similarity(query_embedding, json.loads(row["embedding"]))
+            vector_score = cosine_similarity(query_embedding, row.get("embedding") or [])
             score = vector_score + (token_score * 0.75) + (substring_score * 0.35)
 
             if token_overlap > 0 or substring_score > 0:
@@ -159,9 +214,17 @@ class CivicVectorStore:
         return pd.DataFrame(scored[:limit])
 
     def count(self) -> int:
-        with self._connect() as connection:
-            return int(connection.execute("SELECT COUNT(*) FROM issues").fetchone()[0])
+        rows = self.client.request(
+            "GET",
+            self.table_name,
+            params={"select": "id"},
+        )
+        return len(rows or [])
 
     def clear(self) -> None:
-        with self._connect() as connection:
-            connection.execute("DELETE FROM issues")
+        self.client.request(
+            "DELETE",
+            self.table_name,
+            params={"id": "not.is.null"},
+            headers={"Prefer": "return=minimal"},
+        )

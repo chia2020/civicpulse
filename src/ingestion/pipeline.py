@@ -14,20 +14,40 @@ if __package__ in {None, ""}:
 
 from src.core.scoring import calculate_impact_score
 from src.data.sample_issues import build_sample_issues
+from src.geo.ai_location import infer_hyderabad_locality
 from src.geo.hyderabad import resolve_locality
 from src.storage.vector_store import CivicVectorStore
 
 
 def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
     area = str(raw_issue.get("area") or raw_issue.get("location") or "Hyderabad")
+    title = str(
+        raw_issue.get("title")
+        or raw_issue.get("raw_complaint_summary")
+        or "Hyderabad civic issue"
+    )
+    description = str(
+        raw_issue.get("description")
+        or raw_issue.get("raw_complaint_summary")
+        or title
+    )
     locality = resolve_locality(area)
-    title = str(raw_issue.get("title") or raw_issue.get("raw_complaint_summary") or "Hyderabad civic issue")
-    description = str(raw_issue.get("description") or raw_issue.get("raw_complaint_summary") or title)
+    if locality.zone == "Unknown":
+        text_for_location = " ".join([area, title, description])
+        inferred_area = infer_hyderabad_locality(text_for_location)
+        if inferred_area:
+            inferred_locality = resolve_locality(inferred_area)
+            if inferred_locality.zone != "Unknown":
+                area = inferred_area
+                locality = inferred_locality
     post_date = str(raw_issue.get("post_date") or date.today().isoformat())
     traction_date = str(raw_issue.get("traction_date") or post_date)
     source_url = str(raw_issue.get("source_url") or "")
     stable_key = "|".join([title.lower(), area.lower(), post_date, source_url])
-    issue_id = str(raw_issue.get("id") or f"HYD-{uuid5(NAMESPACE_URL, stable_key).hex[:10].upper()}")
+    issue_id = str(
+        raw_issue.get("id")
+        or f"HYD-{uuid5(NAMESPACE_URL, stable_key).hex[:10].upper()}"
+    )
 
     issue = {
         "id": issue_id,
@@ -80,7 +100,10 @@ def load_issues(
     return vector_store.fetch_all()
 
 
-async def run_live_pipeline(urls: list[str] | None = None, replace_existing: bool = True) -> pd.DataFrame:
+async def run_live_pipeline(
+    urls: list[str] | None = None,
+    replace_existing: bool = True,
+) -> pd.DataFrame:
     from src.ingestion.scraper import scrape_civic_sources_deep
 
     raw_issues = await scrape_civic_sources_deep(urls)
@@ -98,16 +121,25 @@ async def run_live_pipeline(urls: list[str] | None = None, replace_existing: boo
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the CivicPulse ingestion pipeline.")
     parser.add_argument("--live", action="store_true", help="Use live RSS/news scraping.")
-    parser.add_argument("--append", action="store_true", help="Append live records instead of replacing the dashboard dataset.")
-    parser.add_argument("--url", action="append", default=None, help="Optional URL to scrape. Repeat for more URLs.")
+    parser.add_argument(
+        "--append",
+        action="store_true",
+        help="Append live records instead of replacing the dashboard dataset.",
+    )
+    parser.add_argument(
+        "--url",
+        action="append",
+        default=None,
+        help="Optional URL to scrape. Repeat for more URLs.",
+    )
     args = parser.parse_args()
 
     if args.live:
         frame = asyncio.run(run_live_pipeline(args.url, replace_existing=not args.append))
-        print(f"Stored {len(frame)} live issues in storage/civicpulse_vector.db.")
+        print(f"Stored {len(frame)} live issues in Supabase.")
     else:
         frame = seed_sample_data()
-        print(f"Seeded {len(frame)} sample issues in storage/civicpulse_vector.db.")
+        print(f"Seeded {len(frame)} sample issues in Supabase.")
 
 
 if __name__ == "__main__":

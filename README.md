@@ -41,7 +41,7 @@ The system:
 2. Structures this information using Large Language Models (LLMs)
 3. Maps the issues geographically across Hyderabad's neighbourhoods and GHMC zones
 4. Ranks grievances using a **Predictive Impact Engine** based on a multi-parameter weighted score
-5. Stores issue records in a local persistent **vector database** for semantic retrieval and dashboard filtering
+5. Stores issue records in **Supabase** with deterministic embeddings for semantic retrieval and dashboard filtering
 6. Supports **date-based sorting** — by the date an issue received peak internet traction, or the date it was first reported
 
 ---
@@ -49,7 +49,7 @@ The system:
 ## 🏗️ Core Architecture & Workflow
 
 ```
-[Data Ingestion] ──> [AI Synthesis Layer] ──> [Impact Scoring Engine] ──> [Vector DB] ──> [Civic Dashboard]
+[Data Ingestion] -> [AI Synthesis Layer] -> [Impact Scoring Engine] -> [Supabase] -> [Civic Dashboard]
 ```
 
 ### Layer Breakdown
@@ -69,7 +69,7 @@ An LLM processing pipeline that performs Named Entity Recognition (NER) to extra
 A weighted algorithmic model — see full parameter and weight breakdown below.
 
 **4. 🧠 Vector Storage Layer**
-Issue documents are persisted in `storage/civicpulse_vector.db` with deterministic text embeddings, enabling semantic search across area names, categories, issue descriptions, source metadata, and urgency signals without relying on JSON files.
+Issue documents are persisted in Supabase with deterministic text embeddings, enabling semantic search across area names, categories, issue descriptions, source metadata, and urgency signals without relying on JSON files or a local database.
 
 **5. 🗺️ Visualization Layer**
 A centralized geographic map dashboard (built via Streamlit + Leaflet) displaying dynamic **"hotspots"** of high-impact, unchecked civic issues across Hyderabad, sortable by score, post date, or peak traction date.
@@ -135,7 +135,7 @@ Impact Score = (S × 0.30) + (F × 0.25) + (R × 0.20) + (D × 0.15) + (P × 0.1
 | **AI & NLP** | Gemini API / Groq API / Llama-3 (via Ollama) — for NER, severity scoring, and geocoding inference |
 | **Geocoding & Clustering** | `geopy` (landmark → lat/long for Hyderabad localities), string-match deduplication |
 | **Date & Traction Analysis** | Timestamp indexing + engagement volume tracking for post date and peak traction date sorting |
-| **Storage & Retrieval** | Local SQLite-backed vector database with deterministic hashed embeddings |
+| **Storage & Retrieval** | Supabase cloud database with deterministic hashed embeddings |
 | **Frontend Dashboard** | Streamlit + Leaflet.js (interactive geographic mapping) |
 
 ---
@@ -148,7 +148,7 @@ python -m src.ingestion.pipeline
 streamlit run app.py
 ```
 
-The default pipeline seeds localized Hyderabad verification data into `storage/civicpulse_vector.db`.
+Before running, create the Supabase `issues` table and set `SUPABASE_URL` plus `SUPABASE_SERVICE_ROLE_KEY` in `.env` for trusted server-side refreshes. Use `SUPABASE_ANON_KEY`/`SUPABASE_API_KEY` only when RLS allows the required operations. See `PIPELINE.md` for the full schema and runtime flow. The default pipeline seeds localized Hyderabad verification data into Supabase.
 
 For live deep scraping, set `GEMINI_API_KEY` in your environment and run:
 

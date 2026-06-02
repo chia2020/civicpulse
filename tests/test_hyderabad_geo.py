@@ -13,6 +13,18 @@ def test_kukatpally_metro_resolves_to_west_zone() -> None:
     assert locality.zone == "West"
 
 
+def test_common_alias_resolves_to_east_zone() -> None:
+    locality = resolve_locality("drain overflow at L.B. Nagar junction")
+
+    assert locality.zone == "East"
+
+
+def test_hitech_city_resolves_to_west_zone() -> None:
+    locality = resolve_locality("waterlogging near Hi Tech City main road")
+
+    assert locality.zone == "West"
+
+
 def test_unknown_landmark_falls_back_for_manual_triage() -> None:
     locality = resolve_locality("unclear landmark from a noisy scraped post")
 

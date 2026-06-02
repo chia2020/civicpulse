@@ -3,17 +3,16 @@ from __future__ import annotations
 import asyncio
 import html
 import re
-import time
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.error import URLError
 from urllib.parse import quote, urlparse
-from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
-from src.geo.hyderabad import LOCALITIES
+from src.geo.ai_location import infer_hyderabad_locality
+from src.geo.hyderabad import extract_known_locality
 
 PUBLISHER_SUFFIX_PATTERN = re.compile(r"\s+-\s+[^-]+$")
 
@@ -153,12 +152,25 @@ SCOPE_NOISE_TERMS = (
 CATEGORY_KEYWORDS = {
     "Drainage": ("sewage", "sewer", "drain", "drainage", "manhole", "nala"),
     "Roads": ("pothole", "road", "repair", "flyover", "debris"),
-    "Water": ("water supply", "drinking water", "low pressure", "water leakage", "hmwssb"),
+    "Water": (
+        "water supply",
+        "drinking water",
+        "low pressure",
+        "water leakage",
+        "hmwssb",
+    ),
     "Sanitation": ("garbage", "waste", "sanitation", "trash"),
     "Street Lighting": ("street light", "streetlight", "lighting outage"),
     "Power": ("power cut", "electricity", "power outage"),
     "Traffic & Public Safety": ("traffic", "accident", "unsafe", "public safety"),
-    "Urban Infrastructure": ("footpath", "encroachment", "flood", "waterlogging", "lake", "pollution"),
+    "Urban Infrastructure": (
+        "footpath",
+        "encroachment",
+        "flood",
+        "waterlogging",
+        "lake",
+        "pollution",
+    ),
 }
 
 
@@ -216,26 +228,21 @@ def _parse_date(value: str | None) -> str:
     return date.today().isoformat()
 
 
-def _fetch_text(url: str, retries: int = 3, delay_seconds: float = 1.5) -> str:
-    request = Request(
-        url,
-        headers={
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-            ),
-            "Accept": "application/rss+xml, application/xml, text/xml, */*",
-            "Accept-Language": "en-IN,en;q=0.9",
-        },
-    )
+async def _fetch_text_async(url: str, retries: int = 3, delay_seconds: float = 1.5) -> str:
+    from crawl4ai import AsyncWebCrawler
     for attempt in range(1, retries + 1):
         try:
-            with urlopen(request, timeout=20) as response:
-                return response.read().decode("utf-8", errors="replace")
-        except (OSError, URLError):
+            async with AsyncWebCrawler(verbose=False) as crawler:
+                result = await crawler.arun(url=url, bypass_cache=True)
+                if result and result.html:
+                    return result.html
+                if result and result.markdown:
+                    return result.markdown
+                return ""
+        except Exception:
             if attempt == retries:
                 return ""
-            time.sleep(delay_seconds * attempt)
+            await asyncio.sleep(delay_seconds * (2 ** (attempt - 1)))
     return ""
 
 
@@ -274,7 +281,7 @@ def _parse_rss(xml_text: str) -> list[dict[str, str]]:
         link = ""
         link_element = entry.find("atom:link", namespace)
         if link_element is not None:
-            link = str(link_element.attrib.get("href") or "")
+            link = link_element.attrib.get("href") or ""
         entries.append(
             {
                 "title": _find_text(entry, "{http://www.w3.org/2005/Atom}title"),
@@ -303,10 +310,15 @@ def _is_hyderabad_civic_item(title: str, description: str) -> bool:
 
 
 def _extract_area(title: str, description: str) -> str:
-    text = f"{title} {description}".lower()
-    for landmark in sorted(LOCALITIES, key=len, reverse=True):
-        if landmark in text:
-            return landmark.title()
+    text = f"{title} {description}"
+    landmark = extract_known_locality(text)
+    if landmark:
+        return landmark.title()
+
+    inferred = infer_hyderabad_locality(text)
+    if inferred:
+        return inferred
+
     return "Hyderabad"
 
 
@@ -318,18 +330,31 @@ def _classify_category(title: str, description: str) -> str:
     return "Uncategorized"
 
 
-def _score_issue(category: str, title: str, description: str, post_date: str) -> dict[str, float]:
+def _score_issue(
+    category: str,
+    title: str,
+    description: str,
+    post_date: str,
+) -> dict[str, float]:
     text = f"{title} {description}".lower()
     severity = 5.0
-    if any(word in text for word in ("danger", "accident", "death", "injured", "unsafe", "open manhole")):
+    safety_terms = ("danger", "accident", "death", "injured", "unsafe", "open manhole")
+    if any(word in text for word in safety_terms):
         severity = 8.5
     elif category in {"Drainage", "Roads", "Water"}:
         severity = 7.0
     elif category in {"Sanitation", "Street Lighting"}:
         severity = 6.0
 
-    frequency = 6.5 if any(word in text for word in ("residents", "several", "multiple", "again")) else 4.5
-    risk = 7.8 if category == "Drainage" and any(word in text for word in ("monsoon", "rain", "waterlogging")) else 5.5
+    repeated_terms = ("residents", "several", "multiple", "again")
+    frequency = 6.5 if any(word in text for word in repeated_terms) else 4.5
+
+    monsoon_terms = ("monsoon", "rain", "waterlogging")
+    risk = (
+        7.8
+        if category == "Drainage" and any(word in text for word in monsoon_terms)
+        else 5.5
+    )
     try:
         age_days = max(0, (date.today() - datetime.strptime(post_date, "%Y-%m-%d").date()).days)
     except ValueError:
@@ -363,12 +388,30 @@ def _entry_to_issue(entry: dict[str, str], platform: str) -> dict[str, Any] | No
 
 
 async def _scrape_target(target: CrawlTarget) -> list[dict[str, Any]]:
-    xml_text = await asyncio.to_thread(_fetch_text, target.url)
+    content = await _fetch_text_async(target.url)
     issues = []
-    for entry in _parse_rss(xml_text):
-        issue = _entry_to_issue(entry, target.platform)
-        if issue:
-            issues.append(issue)
+    # Attempt RSS extraction first
+    rss_entries = _parse_rss(content)
+    if rss_entries:
+        for entry in rss_entries:
+            issue = _entry_to_issue(entry, target.platform)
+            if issue:
+                issues.append(issue)
+    else:
+        # Fallback for dynamic/markdown websites (like fb/ig mapped via crawl4ai)
+        # In a complete implementation, an LLM would parse markdown to issues here.
+        # For this refactor, we just extract a single generic issue if it matches keywords.
+        if content and _is_hyderabad_civic_item(target.url, content):
+            entry = {
+                "title": f"Civic Issue from {target.platform}",
+                "description": content[:500] + "...",
+                "link": target.url,
+                "published": date.today().isoformat()
+            }
+            issue = _entry_to_issue(entry, target.platform)
+            if issue:
+                issues.append(issue)
+                
     return issues
 
 
