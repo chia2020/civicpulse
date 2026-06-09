@@ -173,7 +173,7 @@ Shifts GHMC resource allocation from *fixing complaints* to *preventing systemic
 Eliminates human bias by mathematically ensuring high-risk, high-impact issues rise to the top of the queue — regardless of which ward or locality the complaint originates from.
 
 **Date-Aware Intelligence**
-By allowing sorting on both post date and peak traction date, CivicPulse lets officials distinguish between *newly emerging* issues and *resurging* ones — enabling different response strategies for each.
+By allowing sorting on both post date and peak traction date, CivicPulse lets officials distinguish between *newly emerging* issues and *resurging* ones which  enables different response strategies for each.
 
 **Actionable Intelligence**
 Provides GHMC officials, ward counselors, and urban planners a ready-to-use triage dashboard for targeted, prioritized maintenance across the city.
