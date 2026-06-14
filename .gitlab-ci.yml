@@ -1,4 +1,5 @@
 stages:
+  - compliance
   - quality
   - security
   - test
@@ -11,6 +12,28 @@ default:
   before_script:
     - python -m pip install --upgrade pip
     - pip install -r requirements-dev.txt
+
+run-organization-compliance:
+  stage: compliance
+  # Points directly to your public Docker Hub image
+  image: YOUR_DOCKERHUB_USERNAME/repo-checker:latest
+  # Bypasses the default python:3.11 pip setup script entirely
+  before_script: []
+  variables:
+    REPO_URL: "$CI_REPOSITORY_URL"
+    BRANCH: "$CI_COMMIT_BRANCH"
+    GITLAB_URL: "$CI_SERVER_URL"
+    OUTPUT_DIR: "$CI_PROJECT_DIR/reports"
+  script:
+    - mkdir -p "$CI_PROJECT_DIR/reports"
+    - echo "Attempting primary containerized compliance check..."
+    - export GITLAB_TOKEN="$ORGANIZATION_COMPLIANCE_TOKEN"
+    - bash /app/entrypoint-checker.sh
+  artifacts:
+    name: "compliance-report-${CI_PROJECT_NAME}"
+    when: always
+    paths:
+      - reports/
 
 quality:
   stage: quality

@@ -1,0 +1,485 @@
+2026-06-05 13:48:50,650 - INFO - app.py: Starting execution...
+2026-06-05 13:58:12,633 - INFO - app.py: Starting execution...
+2026-06-05 13:58:27,085 - INFO - app.py: Starting execution...
+2026-06-05 13:58:27,088 - INFO - Triggering background refresh...
+2026-06-05 13:58:27,089 - INFO - Background thread: Starting ingestion...
+2026-06-05 13:58:48,347 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:48,350 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:49,813 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:50,233 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:50,533 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:51,044 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:51,183 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:51,703 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:51,796 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:52,436 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:52,468 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:53,205 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:53,207 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:54,301 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:54,303 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:55,029 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:55,063 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:55,787 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:55,967 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:56,499 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:56,742 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:57,079 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:57,614 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:57,962 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:58,756 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:58,868 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:59,739 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:58:59,772 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:00,729 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:00,731 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:02,705 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:02,810 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:04,822 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:05,443 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:06,751 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:07,702 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:07,932 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:08,777 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:09,945 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:11,352 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:12,308 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:12,898 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:23,672 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:23,674 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:24,736 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:24,816 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:25,515 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:25,517 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:26,010 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:26,084 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:26,694 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:35,527 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:35,529 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:37,059 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:37,061 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:37,937 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:37,979 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:38,849 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:41,065 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:42,456 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:43,140 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:44,245 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:45,319 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:45,567 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:46,114 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:46,502 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:46,943 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:47,822 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:48,533 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:48,906 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:49,105 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:50,058 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:50,235 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:52,127 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:53,349 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:53,383 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:53,922 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:54,091 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:54,861 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:54,863 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:55,557 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:56,727 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:56,762 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:57,518 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:57,564 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:58,523 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:58,776 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:59,333 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:59,545 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 13:59:59,943 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:00,159 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:00,666 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:15,895 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:19,383 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:19,385 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:20,055 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:20,088 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:20,984 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:21,274 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:22,737 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:22,739 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:23,624 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:23,777 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:24,230 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:24,414 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:24,916 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:25,787 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:26,727 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:27,982 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:28,349 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:28,993 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:29,025 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:29,905 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:29,981 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:30,533 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:30,535 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:31,344 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:31,346 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:32,239 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:32,273 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:33,162 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:39,269 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:39,270 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:39,918 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:40,018 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:40,845 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:40,847 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:41,468 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:41,523 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:42,146 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:42,194 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:42,852 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:53,222 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:53,224 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:54,269 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:54,387 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:55,389 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:55,419 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:56,267 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:56,469 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:57,048 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:57,177 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:57,540 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:57,849 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:58,574 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:59,373 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:00:59,877 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:00,408 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:01,432 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:01,464 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:03,081 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:03,322 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:04,454 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:04,767 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:06,001 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:06,166 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:06,934 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:06,965 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:07,487 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:07,698 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:08,737 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:10,331 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:12,412 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:13,631 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:14,246 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:14,982 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:15,265 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:16,298 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:17,025 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:17,523 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:18,120 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:18,738 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:19,559 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:20,828 - INFO - app.py: Starting execution...
+2026-06-05 14:01:21,599 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:22,834 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:23,445 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:26,667 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:26,669 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:32,791 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:32,824 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:33,618 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:34,010 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:34,424 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:34,642 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:35,640 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:36,092 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:36,261 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:36,931 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:36,932 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:37,716 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:38,239 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:38,443 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:38,881 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:39,038 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:39,829 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:01:40,864 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:02:29,977 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:02:30,012 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:28,203 - INFO - app.py: Starting execution...
+2026-06-05 14:14:29,161 - INFO - app.py: Starting execution...
+2026-06-05 14:14:36,105 - INFO - app.py: Starting execution...
+2026-06-05 14:14:36,107 - INFO - Triggering background refresh...
+2026-06-05 14:14:36,107 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:14:57,194 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:57,246 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:58,048 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:58,050 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:58,623 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:58,665 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:59,292 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:59,356 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:59,944 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:14:59,973 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:00,787 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:00,789 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:01,499 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:01,957 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:03,674 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:04,007 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:05,703 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:05,789 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:07,137 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:07,692 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:08,420 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:08,523 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:09,372 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:09,404 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:10,583 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:10,585 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:11,491 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:11,523 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:12,232 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:12,264 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:12,907 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:12,939 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:13,609 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:13,641 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:14,242 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:14,274 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:14,957 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:14,987 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:16,022 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:16,053 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:17,108 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:18,688 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:23,383 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:23,385 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:24,698 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:24,750 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:25,350 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:40,016 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:40,018 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:40,783 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:40,824 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:41,459 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:41,500 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:42,418 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:42,730 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:43,482 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:44,251 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:44,872 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:45,593 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:46,182 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:46,713 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:47,726 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:48,424 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:48,455 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:48,918 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:48,955 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:49,485 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:49,517 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:50,038 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:50,605 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:50,635 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:51,165 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:51,167 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:51,744 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:51,798 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:52,568 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:52,570 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:53,196 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:53,198 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:53,899 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:53,901 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:54,487 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:54,550 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:55,240 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:55,520 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:56,566 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:56,568 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:15:57,165 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:13,762 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:15,304 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:15,306 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:16,341 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:16,343 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:17,122 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:17,320 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:18,908 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:18,911 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:20,003 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:20,034 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:20,892 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:21,126 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:21,761 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:21,794 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:22,857 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:22,966 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:23,899 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:23,901 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:24,992 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:25,024 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:25,743 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:25,776 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:26,341 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:26,533 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:27,188 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:27,669 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:27,772 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:28,295 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:37,493 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:37,496 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:38,391 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:38,424 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:39,023 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:39,055 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:39,756 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:39,929 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:40,489 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:40,521 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:41,065 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:48,845 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:48,847 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:49,459 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:49,650 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:50,331 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:50,364 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:51,008 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:51,010 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:51,818 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:51,820 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:52,280 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:52,315 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:52,832 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:52,933 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:53,580 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:53,783 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:54,312 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:54,508 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:55,003 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:55,635 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:56,036 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:56,445 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:56,957 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:57,584 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:57,881 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:58,199 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:58,502 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:58,905 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:16:59,507 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:00,041 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:00,145 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:00,939 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:01,500 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:01,706 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:02,323 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:02,397 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:02,934 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:03,166 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:03,604 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:04,090 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:04,360 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:04,840 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:05,475 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:05,868 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:06,271 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:06,802 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:07,498 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:08,550 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:08,730 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:09,250 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:09,664 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:09,964 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:10,373 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:11,014 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:11,045 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:23,219 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:23,222 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:24,335 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:24,338 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:25,061 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:25,063 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:25,856 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:25,935 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:17:26,777 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:18:15,364 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:18:15,397 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:19:03,834 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:19:03,868 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:19:52,553 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:19:52,585 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:20:41,838 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:20:41,870 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:21:30,754 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:21:30,803 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:22:19,399 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:22:19,433 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:23:02,910 - INFO - app.py: Starting execution...
+2026-06-05 14:23:08,200 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:23:08,235 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:23:08,442 - INFO - app.py: Starting execution...
+2026-06-05 14:23:08,444 - INFO - Triggering background refresh...
+2026-06-05 14:23:08,444 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:23:18,682 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20GHMC%20complaint%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:23:19,364 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20bad%20roads%20traffic%20civic%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:23:27,850 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20drainage%20problem%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:23:33,348 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20water%20supply%20disruption%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:23:36,907 - INFO - Background thread: Success, added 18 issues.
+2026-06-05 14:23:58,024 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:23:58,056 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:24:02,053 - INFO - app.py: Starting execution...
+2026-06-05 14:24:10,706 - INFO - app.py: Starting execution...
+2026-06-05 14:24:10,708 - INFO - Triggering background refresh...
+2026-06-05 14:24:10,708 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:24:20,711 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20civic%20issue%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:24:30,074 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20sewage%20overflow%20complaint%20GHMC%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:24:33,092 - INFO - Background thread: Success, added 18 issues.
+2026-06-05 14:24:37,838 - INFO - app.py: Starting execution...
+2026-06-05 14:24:46,954 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:24:47,170 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:25:35,904 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:25:36,116 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:26:04,403 - INFO - app.py: Starting execution...
+2026-06-05 14:26:12,817 - INFO - app.py: Starting execution...
+2026-06-05 14:26:12,819 - INFO - Triggering background refresh...
+2026-06-05 14:26:12,821 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:26:24,574 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:26:24,607 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:26:32,462 - INFO - Background thread: Success, added 19 issues.
+2026-06-05 14:26:33,216 - INFO - app.py: Starting execution...
+2026-06-05 14:26:38,720 - INFO - app.py: Starting execution...
+2026-06-05 14:26:40,701 - INFO - app.py: Starting execution...
+2026-06-05 14:26:40,704 - INFO - Triggering background refresh...
+2026-06-05 14:26:40,704 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:26:50,710 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20civic%20issue%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:26:50,780 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20GHMC%20complaint%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:26:50,891 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20bad%20roads%20traffic%20civic%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:27:04,674 - WARNING - Timed out fetching feed: https://news.google.com/rss/search?q=Hyderabad%20water%20supply%20disruption%20when%3A90d&hl=en-IN&gl=IN&ceid=IN:en
+2026-06-05 14:27:07,745 - INFO - Background thread: Success, added 19 issues.
+2026-06-05 14:27:09,446 - INFO - app.py: Starting execution...
+2026-06-05 14:27:12,964 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-06-05 14:27:12,998 - INFO - AFC is enabled with max remote calls: 10.
+2026-06-05 14:27:30,948 - INFO - app.py: Starting execution...
+2026-06-05 14:27:30,951 - INFO - app.py: Starting execution...
+2026-06-05 14:27:31,861 - INFO - app.py: Starting execution...
+2026-06-05 14:27:32,087 - INFO - app.py: Starting execution...
+2026-06-05 14:27:40,009 - INFO - app.py: Starting execution...
+2026-06-05 14:27:51,050 - INFO - app.py: Starting execution...
+2026-06-05 14:28:16,916 - INFO - app.py: Starting execution...
+2026-06-05 14:28:16,918 - INFO - Triggering background refresh...
+2026-06-05 14:28:16,918 - INFO - Background thread: Starting ingestion...
+2026-06-05 14:28:36,205 - INFO - Background thread: Success, added 18 issues.
+2026-06-05 14:28:36,452 - INFO - app.py: Starting execution...
+2026-06-05 15:11:41,256 - INFO - app.py: Starting execution...
+2026-06-05 15:11:41,257 - INFO - app.py: Starting execution...
+2026-06-05 15:11:41,901 - INFO - app.py: Starting execution...
+2026-06-05 15:11:42,378 - INFO - app.py: Starting execution...
+2026-06-05 15:11:48,750 - INFO - app.py: Starting execution...
+2026-06-05 15:11:48,752 - INFO - Triggering background refresh...
+2026-06-05 15:11:48,752 - INFO - Background thread: Starting ingestion...
+2026-06-05 15:12:07,857 - INFO - Background thread: Success, added 18 issues.
+2026-06-05 15:12:08,695 - INFO - app.py: Starting execution...
+2026-06-05 15:16:23,045 - INFO - app.py: Starting execution...
+2026-06-05 15:16:23,046 - INFO - Triggering background refresh...
+2026-06-05 15:16:23,051 - INFO - Background thread: Starting ingestion...
+2026-06-05 15:16:28,655 - INFO - app.py: Starting execution...
+2026-06-05 15:16:28,657 - INFO - Refresh already running, skipping trigger.
+2026-06-05 15:16:42,295 - INFO - Background thread: Success, added 18 issues.
+2026-06-05 15:16:42,590 - INFO - app.py: Starting execution...

@@ -13,6 +13,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.core.scoring import calculate_impact_score
+from src.config import get_bool_env
 from src.data.sample_issues import build_sample_issues
 from src.geo.ai_location import infer_hyderabad_locality
 from src.geo.hyderabad import extract_known_locality, resolve_locality
@@ -39,8 +40,8 @@ def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
             area = known_area
             locality = resolve_locality(known_area)
 
-    if locality.zone == "Unknown":
-        inferred_area = infer_hyderabad_locality(text_for_location)
+    if locality.zone == "Unknown" and get_bool_env("CIVICPULSE_USE_GEMINI_LOCALITY", False):
+        inferred_area = infer_hyderabad_locality(text_for_location, timeout_seconds=5)
         if inferred_area:
             inferred_locality = resolve_locality(inferred_area)
             if inferred_locality.zone != "Unknown":
@@ -49,7 +50,13 @@ def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
     post_date = str(raw_issue.get("post_date") or date.today().isoformat())
     traction_date = str(raw_issue.get("traction_date") or post_date)
     source_url = str(raw_issue.get("source_url") or "")
-    stable_key = "|".join([title.lower(), area.lower(), post_date, source_url])
+    stable_key = source_url or "|".join(
+        [
+            title.lower().strip(),
+            post_date,
+            str(raw_issue.get("source") or raw_issue.get("source_platform") or "unknown"),
+        ]
+    )
     issue_id = str(
         raw_issue.get("id")
         or f"HYD-{uuid5(NAMESPACE_URL, stable_key).hex[:10].upper()}"
@@ -111,16 +118,27 @@ async def run_live_pipeline(
     replace_existing: bool = True,
 ) -> pd.DataFrame:
     from src.ingestion.scraper import scrape_civic_sources_deep
+    import time
 
+    start_time = time.time()
     raw_issues = await scrape_civic_sources_deep(urls)
+    scrape_time = time.time() - start_time
+    
     store = CivicVectorStore()
     if not raw_issues:
         return pd.DataFrame()
 
+    process_start = time.time()
     issues = [normalize_issue(issue) for issue in raw_issues]
+    process_time = time.time() - process_start
+    
     if replace_existing:
         store.clear()
     store.upsert_issues(issues)
+    
+    total_time = time.time() - start_time
+    print(f"Pipeline: Scraped in {scrape_time:.2f}s, processed {len(issues)} issues in {process_time:.2f}s. Total: {total_time:.2f}s")
+    
     return pd.DataFrame(issues)
 
 

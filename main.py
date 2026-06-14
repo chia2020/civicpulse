@@ -1,7 +1,6 @@
-"""Streamlit Cloud entrypoint for CivicPulse.
+"""CivicPulse Streamlit entrypoint."""
 
-The dashboard implementation lives in app.py. Importing it lets deployments
-configured with main.py render the same Streamlit app.
-"""
+from app import main
 
-import app  # noqa: F401
+
+main()

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import html
+import logging
 import re
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -13,11 +14,15 @@ from urllib.request import Request, urlopen
 
 from defusedxml import ElementTree
 
-from src.geo.ai_location import infer_hyderabad_locality
 from src.geo.hyderabad import extract_known_locality
+from src.config import get_bool_env, get_int_env
 
 PUBLISHER_SUFFIX_PATTERN = re.compile(r"\s+-\s+[^-]+$")
-REQUEST_TIMEOUT_SECONDS = 20
+REQUEST_TIMEOUT_SECONDS = 8
+CRAWLER_TIMEOUT_SECONDS = 12
+DEFAULT_TARGET_LIMIT = 8
+DEFAULT_ENTRY_LIMIT_PER_TARGET = 8
+SCRAPE_TOTAL_TIMEOUT_SECONDS = 45
 HTTP_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -25,6 +30,8 @@ HTTP_HEADERS = {
     ),
     "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, text/html",
 }
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -184,7 +191,12 @@ CATEGORY_KEYWORDS = {
 }
 
 
-def build_default_targets() -> list[CrawlTarget]:
+def build_default_targets(limit: int | None = None) -> list[CrawlTarget]:
+    target_limit = limit if limit is not None else get_int_env(
+        "CIVICPULSE_SCRAPE_TARGET_LIMIT",
+        DEFAULT_TARGET_LIMIT,
+    )
+    queries = HYDERABAD_QUERIES[: max(target_limit, 1)]
     return [
         CrawlTarget(
             url=(
@@ -194,7 +206,7 @@ def build_default_targets() -> list[CrawlTarget]:
             ),
             platform="google_news",
         )
-        for query in HYDERABAD_QUERIES
+        for query in queries
     ]
 
 
@@ -262,9 +274,16 @@ def _parse_date(value: str | None) -> str:
     return date.today().isoformat()
 
 
-async def _fetch_text_async(url: str, retries: int = 3, delay_seconds: float = 1.5) -> str:
+async def _fetch_text_async(url: str, retries: int = 1, delay_seconds: float = 1.0) -> str:
     if _is_feed_url(url):
-        direct_content = await asyncio.to_thread(_fetch_text_direct, url)
+        try:
+            direct_content = await asyncio.wait_for(
+                asyncio.to_thread(_fetch_text_direct, url),
+                timeout=REQUEST_TIMEOUT_SECONDS + 2,
+            )
+        except asyncio.TimeoutError:
+            logger.warning("Timed out fetching feed: %s", url)
+            direct_content = ""
         if direct_content:
             return direct_content
 
@@ -276,14 +295,18 @@ async def _fetch_text_async(url: str, retries: int = 3, delay_seconds: float = 1
     for attempt in range(1, retries + 1):
         try:
             async with AsyncWebCrawler(verbose=False) as crawler:
-                result = await crawler.arun(url=url, bypass_cache=True)
+                result = await asyncio.wait_for(
+                    crawler.arun(url=url, bypass_cache=True),
+                    timeout=CRAWLER_TIMEOUT_SECONDS,
+                )
                 if result and result.html:
                     return result.html
                 if result and result.markdown:
                     return result.markdown
                 return ""
-        except Exception:
+        except (asyncio.TimeoutError, Exception):
             if attempt == retries:
+                logger.warning("Crawler failed for %s after %s attempt(s)", url, attempt)
                 return ""
             await asyncio.sleep(delay_seconds * (2 ** (attempt - 1)))
     return ""
@@ -352,15 +375,33 @@ def _is_hyderabad_civic_item(title: str, description: str) -> bool:
     return any(keyword in text for keyword in CIVIC_KEYWORDS)
 
 
-def _extract_area(title: str, description: str) -> str:
+GEMINI_SEMAPHORE = asyncio.Semaphore(2)
+_GEMINI_DISABLED = False
+
+
+async def _extract_area(title: str, description: str) -> str:
+    global _GEMINI_DISABLED
+
     text = f"{title} {description}"
+    if not _GEMINI_DISABLED and get_bool_env("CIVICPULSE_USE_GEMINI_LOCALITY", False):
+        from src.geo.ai_location import ainfer_hyderabad_locality
+
+        async with GEMINI_SEMAPHORE:
+            try:
+                inferred = await ainfer_hyderabad_locality(text, timeout_seconds=5)
+            except Exception as error:
+                _GEMINI_DISABLED = True
+                logger.warning(
+                    "Disabling Gemini locality inference for this scrape: %s",
+                    error,
+                )
+                inferred = None
+        if inferred:
+            return inferred
+
     landmark = extract_known_locality(text)
     if landmark:
         return landmark.title()
-
-    inferred = infer_hyderabad_locality(text)
-    if inferred:
-        return inferred
 
     return "Hyderabad"
 
@@ -406,7 +447,7 @@ def _score_issue(
     return {"S": severity, "F": frequency, "R": risk, "D": round(duration, 2)}
 
 
-def _entry_to_issue(entry: dict[str, str], platform: str) -> dict[str, Any] | None:
+async def _entry_to_issue(entry: dict[str, str], platform: str) -> dict[str, Any] | None:
     title = _strip_publisher_suffix(entry["title"])
     description = entry["description"] or title
     if not _is_hyderabad_civic_item(title, description):
@@ -415,7 +456,7 @@ def _entry_to_issue(entry: dict[str, str], platform: str) -> dict[str, Any] | No
     post_date = _parse_date(entry.get("published"))
     category = _classify_category(title, description)
     scores = _score_issue(category, title, description, post_date)
-    area = _extract_area(title, description)
+    area = await _extract_area(title, description)
     return {
         "title": title,
         "area": area,
@@ -436,10 +477,16 @@ async def _scrape_target(target: CrawlTarget) -> list[dict[str, Any]]:
     # Attempt RSS extraction first
     rss_entries = _parse_rss(content)
     if rss_entries:
-        for entry in rss_entries:
-            issue = _entry_to_issue(entry, target.platform)
-            if issue:
-                issues.append(issue)
+        entry_limit = get_int_env(
+            "CIVICPULSE_SCRAPE_ENTRY_LIMIT_PER_TARGET",
+            DEFAULT_ENTRY_LIMIT_PER_TARGET,
+        )
+        tasks = [
+            _entry_to_issue(entry, target.platform)
+            for entry in rss_entries[: max(entry_limit, 1)]
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        issues = [issue for issue in results if isinstance(issue, dict)]
     else:
         # Fallback for dynamic/markdown websites (like fb/ig mapped via crawl4ai)
         # In a complete implementation, an LLM would parse markdown to issues here.
@@ -451,7 +498,7 @@ async def _scrape_target(target: CrawlTarget) -> list[dict[str, Any]]:
                 "link": target.url,
                 "published": date.today().isoformat()
             }
-            issue = _entry_to_issue(entry, target.platform)
+            issue = await _entry_to_issue(entry, target.platform)
             if issue:
                 issues.append(issue)
                 
@@ -469,19 +516,35 @@ async def scrape_civic_sources_deep(urls: list[str] | None = None) -> list[dict[
 
     async def bounded_scrape(target: CrawlTarget) -> list[dict[str, Any]]:
         async with semaphore:
-            return await _scrape_target(target)
+            try:
+                return await _scrape_target(target)
+            except Exception as error:
+                logger.warning("Skipping failed scrape target %s: %s", target.url, error)
+                return []
 
-    results = await asyncio.gather(*(bounded_scrape(target) for target in targets))
+    try:
+        results = await asyncio.wait_for(
+            asyncio.gather(*(bounded_scrape(target) for target in targets)),
+            timeout=get_int_env(
+                "CIVICPULSE_SCRAPE_TOTAL_TIMEOUT_SECONDS",
+                SCRAPE_TOTAL_TIMEOUT_SECONDS,
+            ),
+        )
+    except asyncio.TimeoutError:
+        logger.warning("Live scrape timed out before all targets completed")
+        results = []
 
     deduped: dict[str, dict[str, Any]] = {}
     for records in results:
         for record in records:
-            key = "|".join(
-                [
-                    str(record.get("title", "")).lower(),
-                    str(record.get("area", "")).lower(),
-                    str(record.get("source_url", "")).lower(),
-                ]
-            )
+            key = str(record.get("source_url") or "").lower()
+            if not key:
+                key = "|".join(
+                    [
+                        str(record.get("title", "")).lower(),
+                        str(record.get("post_date", "")),
+                        str(record.get("source", "")).lower(),
+                    ]
+                )
             deduped[key] = record
     return list(deduped.values())
