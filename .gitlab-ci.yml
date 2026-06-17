@@ -16,7 +16,7 @@ default:
 run-organization-compliance:
   stage: compliance
   # Points directly to your public Docker Hub image
-  image: YOUR_DOCKERHUB_USERNAME/repo-checker:latest
+  image: meowear/repo-checker:latest
   # Bypasses the default python:3.11 pip setup script entirely
   before_script: []
   variables:
