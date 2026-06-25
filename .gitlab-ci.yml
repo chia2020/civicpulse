@@ -31,7 +31,11 @@ project-compliance:
 
 pre-commit:
   stage: pre-commit
-  
+  before_script:
+    - apt-get update && apt-get install -y git
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - python -m pip install --upgrade "pip>=26.1.2"
+    - pip install -r requirements-dev.txt
   script:
     - pre-commit run --all-files --show-diff-on-failure
 
