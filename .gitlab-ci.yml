@@ -20,25 +20,30 @@ default:
     - python -m pip install --upgrade "pip>=26.1.2"
     - pip install -r requirements-dev.txt
 
-project-compliance:
+run-organization-compliance:
   stage: compliance
+  # Pulls the hosted checker environment automatically
+  image: meowear/swecha_compliance_checker:latest
+  
+  # Bypasses any global/default pip compilation hooks
   before_script: []
+  variables:
+    REPO_URL: "$CI_REPOSITORY_URL"
+    BRANCH: "$CI_COMMIT_BRANCH"
+    GITLAB_URL: "$CI_SERVER_URL"
+    OUTPUT_DIR: "$CI_PROJECT_DIR/reports"
+    
   script:
-    - test -f AGENTS.md
-    - test -f requirements.txt
-    - test -f requirements-dev.txt
-    - test -f pytest.ini
-    - test -f .pre-commit-config.yaml
-
-pre-commit:
-  stage: pre-commit
-  before_script:
-    - apt-get update && apt-get install -y git
-    - git config --global --add safe.directory "$CI_PROJECT_DIR"
-    - python -m pip install --upgrade "pip>=26.1.2"
-    - pip install pre-commit
-  script:
-    - pre-commit run --all-files --show-diff-on-failure
+    - mkdir -p "$CI_PROJECT_DIR/reports"
+    - echo "Executing containerized compliance check..."
+    - export GITLAB_TOKEN="$ORGANIZATION_COMPLIANCE_TOKEN"
+    - bash /app/entrypoint-checker.sh
+    
+  artifacts:
+    name: "compliance-report-${CI_PROJECT_NAME}"
+    when: always
+    paths:
+      - reports/ # Collects the generated JSON file as a pipeline download
 
 quality:
   stage: quality
