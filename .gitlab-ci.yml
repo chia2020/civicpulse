@@ -31,6 +31,7 @@ project-compliance:
 
 pre-commit:
   stage: pre-commit
+  
   script:
     - pre-commit run --all-files --show-diff-on-failure
 
