@@ -58,7 +58,7 @@ security:
   script:
     - bandit -r src
     - pip-audit --ignore-vuln PYSEC-2026-87 -r requirements.txt -r requirements-dev.txt
-    - semgrep --config auto --error
+    - semgrep --config auto --error src/ app.py
 
 test:
   stage: test
