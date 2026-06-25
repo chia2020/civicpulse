@@ -6,6 +6,8 @@ import time
 from html import escape
 from urllib.parse import urlencode
 
+from typing import Any
+
 import streamlit as st
 
 from src.core.state import BackgroundJob
@@ -117,7 +119,7 @@ def render_ghmc_link(label: str, url: str) -> None:
     )
 
 
-def apply_completed_refresh(job: dict[str, object]) -> bool:
+def apply_completed_refresh(job: dict[str, Any]) -> bool:
     version = int(job.get("version") or 0)
     applied_version = int(st.session_state.get("applied_refresh_version") or 0)
     if job.get("status") != "complete" or version <= applied_version:
