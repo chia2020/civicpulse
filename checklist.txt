@@ -1,0 +1,4 @@
+local runner
+volunteer-compute
+ollaa install
+successful pipeline

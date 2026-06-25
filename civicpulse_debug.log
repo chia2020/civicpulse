@@ -483,3 +483,491 @@
 2026-06-05 15:16:28,657 - INFO - Refresh already running, skipping trigger.
 2026-06-05 15:16:42,295 - INFO - Background thread: Success, added 18 issues.
 2026-06-05 15:16:42,590 - INFO - app.py: Starting execution...
+2026-06-17 14:15:33,144 - INFO - app.py: Starting execution...
+2026-06-17 14:15:34,374 - ERROR - Dashboard data load failed: Supabase is unreachable: [Errno -2] Name or service not known
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/urllib/request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1492, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1023, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 840, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 119, in request
+    with urlopen(request, timeout=self.timeout_seconds) as response:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 489, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.13/urllib/request.py", line 506, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.13/urllib/request.py", line 1367, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 338, in main
+    st.session_state["dashboard_df"] = load_dashboard_data()
+                                       ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 83, in load_dashboard_data
+    frame = cached_load_issues(query or None, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 75, in cached_load_issues
+    return _CACHED_LOAD_ISSUES(query, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 280, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 325, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 384, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 67, in _load_issues_uncached
+    return load_issues(query)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/ingestion/pipeline.py", line 113, in load_issues
+    return vector_store.fetch_all()
+           ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 175, in fetch_all
+    rows = self.client.request(
+        "GET",
+    ...<4 lines>...
+        },
+    )
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 125, in request
+    raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+RuntimeError: Supabase is unreachable: [Errno -2] Name or service not known
+2026-06-17 14:16:00,956 - INFO - app.py: Starting execution...
+2026-06-17 14:16:02,511 - ERROR - Dashboard data load failed: Supabase is unreachable: [Errno -2] Name or service not known
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/urllib/request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1492, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1023, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 840, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 119, in request
+    with urlopen(request, timeout=self.timeout_seconds) as response:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 489, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.13/urllib/request.py", line 506, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.13/urllib/request.py", line 1367, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 338, in main
+    st.session_state["dashboard_df"] = load_dashboard_data()
+                                       ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 83, in load_dashboard_data
+    frame = cached_load_issues(query or None, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 75, in cached_load_issues
+    return _CACHED_LOAD_ISSUES(query, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 280, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 325, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 384, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 67, in _load_issues_uncached
+    return load_issues(query)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/ingestion/pipeline.py", line 113, in load_issues
+    return vector_store.fetch_all()
+           ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 175, in fetch_all
+    rows = self.client.request(
+        "GET",
+    ...<4 lines>...
+        },
+    )
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 125, in request
+    raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+RuntimeError: Supabase is unreachable: [Errno -2] Name or service not known
+2026-06-17 14:16:06,308 - INFO - app.py: Starting execution...
+2026-06-17 14:16:06,439 - ERROR - Dashboard data load failed: Supabase is unreachable: [Errno -2] Name or service not known
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/urllib/request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1492, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1023, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 840, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 119, in request
+    with urlopen(request, timeout=self.timeout_seconds) as response:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 489, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.13/urllib/request.py", line 506, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.13/urllib/request.py", line 1367, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 338, in main
+    st.session_state["dashboard_df"] = load_dashboard_data()
+                                       ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 83, in load_dashboard_data
+    frame = cached_load_issues(query or None, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 75, in cached_load_issues
+    return _CACHED_LOAD_ISSUES(query, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 280, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 325, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 384, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 67, in _load_issues_uncached
+    return load_issues(query)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/ingestion/pipeline.py", line 113, in load_issues
+    return vector_store.fetch_all()
+           ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 175, in fetch_all
+    rows = self.client.request(
+        "GET",
+    ...<4 lines>...
+        },
+    )
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 125, in request
+    raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+RuntimeError: Supabase is unreachable: [Errno -2] Name or service not known
+2026-06-17 14:16:20,935 - INFO - app.py: Starting execution...
+2026-06-17 14:16:20,937 - INFO - Triggering background refresh...
+2026-06-17 14:16:20,937 - INFO - Background thread: Starting ingestion...
+2026-06-17 14:16:21,110 - ERROR - Dashboard data load failed: Supabase is unreachable: [Errno -2] Name or service not known
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/urllib/request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1492, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1023, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 840, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 119, in request
+    with urlopen(request, timeout=self.timeout_seconds) as response:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 489, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.13/urllib/request.py", line 506, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.13/urllib/request.py", line 1367, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 338, in main
+    st.session_state["dashboard_df"] = load_dashboard_data()
+                                       ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 83, in load_dashboard_data
+    frame = cached_load_issues(query or None, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 75, in cached_load_issues
+    return _CACHED_LOAD_ISSUES(query, refresh_version)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 280, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 325, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/venv/lib/python3.13/site-packages/streamlit/runtime/caching/cache_utils.py", line 384, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 67, in _load_issues_uncached
+    return load_issues(query)
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/ingestion/pipeline.py", line 113, in load_issues
+    return vector_store.fetch_all()
+           ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 175, in fetch_all
+    rows = self.client.request(
+        "GET",
+    ...<4 lines>...
+        },
+    )
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 125, in request
+    raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+RuntimeError: Supabase is unreachable: [Errno -2] Name or service not known
+2026-06-17 14:16:24,666 - ERROR - Background thread: Failed with error: Supabase is unreachable: [Errno -2] Name or service not known
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/urllib/request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1492, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/client.py", line 1023, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 840, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 119, in request
+    with urlopen(request, timeout=self.timeout_seconds) as response:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 489, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.13/urllib/request.py", line 506, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.13/urllib/request.py", line 1367, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/urllib/request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/app.py", line 36, in _run_ingestion_background
+    frame = loop.run_until_complete(run_live_pipeline(replace_existing=False))
+  File "/usr/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/ingestion/pipeline.py", line 137, in run_live_pipeline
+    store.upsert_issues(issues)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 165, in upsert_issues
+    self.client.request(
+    ~~~~~~~~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<3 lines>...
+        headers={"Prefer": "resolution=merge-duplicates,return=minimal"},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/chaitrali/Downloads/practice_school/civicpulse/src/storage/vector_store.py", line 125, in request
+    raise RuntimeError(f"Supabase is unreachable: {exc.reason}") from exc
+RuntimeError: Supabase is unreachable: [Errno -2] Name or service not known
+2026-06-17 14:20:51,046 - INFO - app.py: Starting execution...
+2026-06-17 14:21:09,476 - INFO - app.py: Starting execution...
+2026-06-17 14:21:09,477 - INFO - app.py: Starting execution...
+2026-06-17 14:21:11,395 - INFO - app.py: Starting execution...
+2026-06-17 14:21:18,285 - INFO - app.py: Starting execution...
+2026-06-17 14:21:45,287 - INFO - app.py: Starting execution...
+2026-06-17 14:21:55,432 - INFO - app.py: Starting execution...
+2026-06-17 14:22:41,759 - INFO - app.py: Starting execution...
+2026-06-19 10:42:10,076 - INFO - app.py: Starting execution...
+2026-06-19 10:52:52,468 - INFO - app.py: Starting execution...
+2026-06-19 10:52:53,157 - INFO - app.py: Starting execution...
+2026-06-19 11:57:55,950 - INFO - app.py: Starting execution...
+2026-06-19 13:08:50,599 - INFO - app.py: Starting execution...
+2026-06-19 13:35:34,324 - INFO - app.py: Starting execution...
+2026-06-19 14:15:22,194 - INFO - app.py: Starting execution...
