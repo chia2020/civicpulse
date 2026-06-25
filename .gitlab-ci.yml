@@ -23,11 +23,11 @@ default:
 project-compliance:
   stage: compliance
   script:
-    - test -f AGENTS.md
-    - test -f requirements.txt
-    - test -f requirements-dev.txt
-    - test -f pytest.ini
-    - test -f .pre-commit-config.yaml
+    - sudo test -f AGENTS.md
+    - sudo test -f requirements.txt
+    - sudo test -f requirements-dev.txt
+    - sudo test -f pytest.ini
+    - sudo test -f .pre-commit-config.yaml
 
 pre-commit:
   stage: pre-commit
