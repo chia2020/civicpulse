@@ -4,9 +4,8 @@ import logging
 import threading
 import time
 from html import escape
-from urllib.parse import urlencode
-
 from typing import Any
+from urllib.parse import urlencode
 
 import streamlit as st
 
