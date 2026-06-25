@@ -32,11 +32,11 @@ run-organization-compliance:
     BRANCH: "$CI_COMMIT_BRANCH"
     GITLAB_URL: "$CI_SERVER_URL"
     OUTPUT_DIR: "$CI_PROJECT_DIR/reports"
+    GITLAB_TOKEN: "$ORGANIZATION_COMPLIANCE_TOKEN"
     
   script:
     - mkdir -p "$CI_PROJECT_DIR/reports"
     - echo "Executing containerized compliance check..."
-    - export GITLAB_TOKEN="$ORGANIZATION_COMPLIANCE_TOKEN"
     - bash /app/entrypoint-checker.sh
     
   artifacts:
