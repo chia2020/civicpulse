@@ -22,6 +22,7 @@ default:
 
 project-compliance:
   stage: compliance
+  before_script: []
   script:
     - test -f AGENTS.md
     - test -f requirements.txt
@@ -35,7 +36,7 @@ pre-commit:
     - apt-get update && apt-get install -y git
     - git config --global --add safe.directory "$CI_PROJECT_DIR"
     - python -m pip install --upgrade "pip>=26.1.2"
-    - pip install -r requirements-dev.txt
+    - pip install pre-commit
   script:
     - pre-commit run --all-files --show-diff-on-failure
 
@@ -51,9 +52,12 @@ quality:
 
 security:
   stage: security
+  before_script:
+    - python -m pip install --upgrade "pip>=26.1.2"
+    - pip install bandit pip-audit semgrep
   script:
     - bandit -r src
-    - pip-audit --ignore-vuln PYSEC-2026-87
+    - pip-audit --ignore-vuln PYSEC-2026-87 -r requirements.txt -r requirements-dev.txt
     - semgrep --config auto --error
 
 test:
