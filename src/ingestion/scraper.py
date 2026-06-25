@@ -14,8 +14,8 @@ from urllib.request import Request, urlopen
 
 from defusedxml import ElementTree
 
-from src.geo.hyderabad import extract_known_locality
 from src.config import get_bool_env, get_int_env
+from src.geo.hyderabad import extract_known_locality
 
 PUBLISHER_SUFFIX_PATTERN = re.compile(r"\s+-\s+[^-]+$")
 REQUEST_TIMEOUT_SECONDS = 8
@@ -192,9 +192,13 @@ CATEGORY_KEYWORDS = {
 
 
 def build_default_targets(limit: int | None = None) -> list[CrawlTarget]:
-    target_limit = limit if limit is not None else get_int_env(
-        "CIVICPULSE_SCRAPE_TARGET_LIMIT",
-        DEFAULT_TARGET_LIMIT,
+    target_limit = (
+        limit
+        if limit is not None
+        else get_int_env(
+            "CIVICPULSE_SCRAPE_TARGET_LIMIT",
+            DEFAULT_TARGET_LIMIT,
+        )
     )
     queries = HYDERABAD_QUERIES[: max(target_limit, 1)]
     return [
@@ -236,13 +240,18 @@ def _fetch_text_direct(url: str, timeout_seconds: int = REQUEST_TIMEOUT_SECONDS)
 
     request = Request(url, headers=HTTP_HEADERS)  # noqa: S310
     try:
-        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+        # URL scheme is limited to http/https above.
+        # nosemgrep
+        with urlopen(  # noqa: S310  # nosec B310
+            request,
+            timeout=timeout_seconds,
+        ) as response:
             raw_body = response.read()
             content_type = response.headers.get_content_charset() or "utf-8"
     except (OSError, URLError):
         return ""
 
-    return raw_body.decode(content_type, errors="replace")
+    return str(raw_body.decode(content_type, errors="replace"))
 
 
 def _strip_markup(value: str) -> str:
@@ -300,9 +309,9 @@ async def _fetch_text_async(url: str, retries: int = 1, delay_seconds: float = 1
                     timeout=CRAWLER_TIMEOUT_SECONDS,
                 )
                 if result and result.html:
-                    return result.html
+                    return str(result.html)
                 if result and result.markdown:
-                    return result.markdown
+                    return str(result.markdown)
                 return ""
         except (asyncio.TimeoutError, Exception):
             if attempt == retries:
@@ -434,11 +443,7 @@ def _score_issue(
     frequency = 6.5 if any(word in text for word in repeated_terms) else 4.5
 
     monsoon_terms = ("monsoon", "rain", "waterlogging")
-    risk = (
-        7.8
-        if category == "Drainage" and any(word in text for word in monsoon_terms)
-        else 5.5
-    )
+    risk = 7.8 if category == "Drainage" and any(word in text for word in monsoon_terms) else 5.5
     try:
         age_days = max(0, (date.today() - datetime.strptime(post_date, "%Y-%m-%d").date()).days)
     except ValueError:
@@ -482,8 +487,7 @@ async def _scrape_target(target: CrawlTarget) -> list[dict[str, Any]]:
             DEFAULT_ENTRY_LIMIT_PER_TARGET,
         )
         tasks = [
-            _entry_to_issue(entry, target.platform)
-            for entry in rss_entries[: max(entry_limit, 1)]
+            _entry_to_issue(entry, target.platform) for entry in rss_entries[: max(entry_limit, 1)]
         ]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         issues = [issue for issue in results if isinstance(issue, dict)]
@@ -496,12 +500,12 @@ async def _scrape_target(target: CrawlTarget) -> list[dict[str, Any]]:
                 "title": f"Civic Issue from {target.platform}",
                 "description": content[:500] + "...",
                 "link": target.url,
-                "published": date.today().isoformat()
+                "published": date.today().isoformat(),
             }
             issue = await _entry_to_issue(entry, target.platform)
             if issue:
                 issues.append(issue)
-                
+
     return issues
 
 

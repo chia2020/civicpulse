@@ -1,4 +1,4 @@
-local runner
-volunteer-compute
-ollaa install
+local runner done
+volunteer-compute..!
+ollaa install done
 successful pipeline

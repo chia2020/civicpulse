@@ -1,6 +1,7 @@
 import threading
 import time
 
+
 class BackgroundJob:
     _lock = threading.Lock()
     _status = "idle"

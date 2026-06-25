@@ -4,15 +4,15 @@ import hashlib
 import json
 import math
 import os
-from typing import Any, Iterable, Protocol
+from collections.abc import Iterable
+from typing import Any, Protocol
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 
 import pandas as pd
 
 from src.config import load_environment
-
 
 EMBEDDING_DIMENSIONS = 128
 DEFAULT_TABLE_NAME = "issues"
@@ -30,8 +30,7 @@ class SupabaseClientProtocol(Protocol):
         params: dict[str, str] | None = None,
         payload: Any | None = None,
         headers: dict[str, str] | None = None,
-    ) -> Any:
-        ...
+    ) -> Any: ...
 
 
 def _tokenize(text: str) -> list[str]:
@@ -40,6 +39,13 @@ def _tokenize(text: str) -> list[str]:
         for token in text.split()
         if token.strip(".,:;!?()[]{}\"'")
     ]
+
+
+def _to_float(value: object, default: float = 0.0) -> float:
+    try:
+        return float(str(value))
+    except (TypeError, ValueError):
+        return default
 
 
 def embed_text(text: str, dimensions: int = EMBEDDING_DIMENSIONS) -> list[float]:
@@ -57,7 +63,7 @@ def embed_text(text: str, dimensions: int = EMBEDDING_DIMENSIONS) -> list[float]
 
 
 def cosine_similarity(left: list[float], right: list[float]) -> float:
-    return sum(a * b for a, b in zip(left, right))
+    return sum(a * b for a, b in zip(left, right, strict=False))
 
 
 def _searchable_text(issue: dict[str, object]) -> str:
@@ -82,7 +88,7 @@ class SupabaseRestClient:
         self.timeout_seconds = timeout_seconds
 
     @classmethod
-    def from_environment(cls) -> "SupabaseRestClient":
+    def from_environment(cls) -> SupabaseRestClient:
         load_environment()
         url = os.getenv("SUPABASE_URL") or os.getenv("CIVICPULSE_SUPABASE_URL")
         api_key = _supabase_api_key()
@@ -114,9 +120,18 @@ class SupabaseRestClient:
         if headers:
             request_headers.update(headers)
 
-        request = Request(url, data=body, headers=request_headers, method=method)
+        parsed_url = urlparse(url)
+        if parsed_url.scheme not in {"http", "https"}:
+            raise RuntimeError("Supabase URL must use http or https.")
+
+        request = Request(url, data=body, headers=request_headers, method=method)  # noqa: S310
         try:
-            with urlopen(request, timeout=self.timeout_seconds) as response:
+            # URL scheme is limited to http/https above.
+            # nosemgrep
+            with urlopen(  # noqa: S310  # nosec B310
+                request,
+                timeout=self.timeout_seconds,
+            ) as response:
                 response_body = response.read().decode("utf-8")
         except HTTPError as exc:
             details = exc.read().decode("utf-8", errors="replace")
@@ -139,7 +154,7 @@ class CivicVectorStore:
     ) -> None:
         load_environment()
         self.client = client or SupabaseRestClient.from_environment()
-        self.table_name = table_name or os.getenv("SUPABASE_TABLE", DEFAULT_TABLE_NAME)
+        self.table_name: str = table_name or os.getenv("SUPABASE_TABLE") or DEFAULT_TABLE_NAME
 
     def upsert_issues(self, issues: Iterable[dict[str, object]]) -> int:
         records = []
@@ -150,7 +165,7 @@ class CivicVectorStore:
                     "id": str(issue["id"]),
                     "document": document,
                     "embedding": embed_text(_searchable_text(document)),
-                    "impact_score": float(issue["impact_score"]),
+                    "impact_score": _to_float(issue["impact_score"]),
                     "post_date": str(issue["post_date"]),
                     "traction_date": str(issue["traction_date"]),
                     "zone": str(issue["zone"]),

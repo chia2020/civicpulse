@@ -1,6 +1,6 @@
 # 🤖 AGENTS.md
 
-Welcome, AI Agent! This file contains the essential project context, behavioral constraints, engineering standards, and execution workflows required to develop, maintain, and scale **CivicPulse** safely and efficiently. 
+Welcome, AI Agent! This file contains the essential project context, behavioral constraints, engineering standards, and execution workflows required to develop, maintain, and scale **CivicPulse** safely and efficiently.
 
 Always read and align your outputs with this specification before proposing or modifying code.
 

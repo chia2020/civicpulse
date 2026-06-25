@@ -1,8 +1,21 @@
 [MASTER]
 ignore=venv
+persistent=no
 
 [FORMAT]
 max-line-length=100
 
 [MESSAGES CONTROL]
-disable=missing-module-docstring,missing-function-docstring,missing-class-docstring,invalid-name,too-few-public-methods
+disable=
+    missing-module-docstring,
+    missing-function-docstring,
+    missing-class-docstring,
+    invalid-name,
+    too-few-public-methods,
+    broad-exception-caught,
+    global-statement,
+    import-outside-toplevel,
+    too-many-locals,
+    too-many-return-statements,
+    unspecified-encoding,
+    wrong-import-position

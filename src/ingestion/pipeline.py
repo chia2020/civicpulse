@@ -12,25 +12,35 @@ import pandas as pd
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.core.scoring import calculate_impact_score
 from src.config import get_bool_env
+from src.core.scoring import calculate_impact_score
 from src.data.sample_issues import build_sample_issues
 from src.geo.ai_location import infer_hyderabad_locality
 from src.geo.hyderabad import extract_known_locality, resolve_locality
 from src.storage.vector_store import CivicVectorStore
 
 
+def _to_float(value: object, default: float) -> float:
+    try:
+        return float(str(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def _to_int(value: object, default: int = 0) -> int:
+    try:
+        return int(str(value))
+    except (TypeError, ValueError):
+        return default
+
+
 def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
     area = str(raw_issue.get("area") or raw_issue.get("location") or "Hyderabad")
     title = str(
-        raw_issue.get("title")
-        or raw_issue.get("raw_complaint_summary")
-        or "Hyderabad civic issue"
+        raw_issue.get("title") or raw_issue.get("raw_complaint_summary") or "Hyderabad civic issue"
     )
     description = str(
-        raw_issue.get("description")
-        or raw_issue.get("raw_complaint_summary")
-        or title
+        raw_issue.get("description") or raw_issue.get("raw_complaint_summary") or title
     )
     locality = resolve_locality(area)
     text_for_location = " ".join([area, title, description])
@@ -58,8 +68,7 @@ def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
         ]
     )
     issue_id = str(
-        raw_issue.get("id")
-        or f"HYD-{uuid5(NAMESPACE_URL, stable_key).hex[:10].upper()}"
+        raw_issue.get("id") or f"HYD-{uuid5(NAMESPACE_URL, stable_key).hex[:10].upper()}"
     )
 
     issue = {
@@ -73,21 +82,21 @@ def normalize_issue(raw_issue: dict[str, object]) -> dict[str, object]:
         "source_url": source_url,
         "post_date": post_date,
         "traction_date": traction_date,
-        "engagement_count": int(raw_issue.get("engagement_count") or 0),
+        "engagement_count": _to_int(raw_issue.get("engagement_count"), 0),
         "latitude": locality.latitude,
         "longitude": locality.longitude,
-        "S": float(raw_issue.get("S") or raw_issue.get("severity") or 5.0),
-        "F": float(raw_issue.get("F") or 5.0),
-        "R": float(raw_issue.get("R") or 5.0),
-        "D": float(raw_issue.get("D") or 1.0),
+        "S": _to_float(raw_issue.get("S") or raw_issue.get("severity"), 5.0),
+        "F": _to_float(raw_issue.get("F"), 5.0),
+        "R": _to_float(raw_issue.get("R"), 5.0),
+        "D": _to_float(raw_issue.get("D"), 1.0),
         "P": locality.population_density_score,
     }
     issue["impact_score"] = calculate_impact_score(
-        float(issue["S"]),
-        float(issue["F"]),
-        float(issue["R"]),
-        float(issue["D"]),
-        float(issue["P"]),
+        _to_float(issue["S"], 5.0),
+        _to_float(issue["F"], 5.0),
+        _to_float(issue["R"], 5.0),
+        _to_float(issue["D"], 1.0),
+        _to_float(issue["P"], 5.0),
     )
     return issue
 
@@ -117,13 +126,14 @@ async def run_live_pipeline(
     urls: list[str] | None = None,
     replace_existing: bool = True,
 ) -> pd.DataFrame:
-    from src.ingestion.scraper import scrape_civic_sources_deep
     import time
+
+    from src.ingestion.scraper import scrape_civic_sources_deep
 
     start_time = time.time()
     raw_issues = await scrape_civic_sources_deep(urls)
     scrape_time = time.time() - start_time
-    
+
     store = CivicVectorStore()
     if not raw_issues:
         return pd.DataFrame()
@@ -131,14 +141,17 @@ async def run_live_pipeline(
     process_start = time.time()
     issues = [normalize_issue(issue) for issue in raw_issues]
     process_time = time.time() - process_start
-    
+
     if replace_existing:
         store.clear()
     store.upsert_issues(issues)
-    
+
     total_time = time.time() - start_time
-    print(f"Pipeline: Scraped in {scrape_time:.2f}s, processed {len(issues)} issues in {process_time:.2f}s. Total: {total_time:.2f}s")
-    
+    print(
+        f"Pipeline: Scraped in {scrape_time:.2f}s, processed {len(issues)} issues "
+        f"in {process_time:.2f}s. Total: {total_time:.2f}s"
+    )
+
     return pd.DataFrame(issues)
 
 

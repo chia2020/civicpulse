@@ -28,7 +28,7 @@ Located at the top of the interface, these cards give an immediate assessment of
 ---
 
 ## 4. The Predictive Impact Scoring Model
-Every issue captured by the AI synthesis layer is subjected to a strict, multi-parameter mathematical model to ensure geometric fairness and remove human reporting bias. 
+Every issue captured by the AI synthesis layer is subjected to a strict, multi-parameter mathematical model to ensure geometric fairness and remove human reporting bias.
 
 ### The Formula
 $$	ext{Impact Score} = (S 	imes 0.30) + (F 	imes 0.25) + (R 	imes 0.20) + (D 	imes 0.15) + (P 	imes 0.10)$$
@@ -99,4 +99,3 @@ At the bottom of the user interface sits the line chart mapping total citywide r
 * **GHMC Officials & City Administrators:** Use the default **Impact Score** view every morning to dispatch repair trucks, sanitary workers, and engineering teams to the highest-risk hotspots across Hyderabad's 150+ administrative wards.
 * **Ward Counselors & Local Inspectors:** Filter the dashboard by your specific localized keywords (e.g., inputting *"Malakpet"* or *"Uppal"*) to build your regional daily oversight agenda.
 * **Urban Planners:** Filter the dashboard by specific categories like `Drainage` or `Roads` and analyze the 14-day trend line alongside the geographic heatmap to identify systemic infrastructure deficits requiring long-term capital investments.
-

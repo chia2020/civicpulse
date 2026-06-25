@@ -1,3 +1,17 @@
+default_language_version:
+  python: python3
+
+exclude: |
+  (?x)^(
+    venv/|
+    __pycache__/|
+    \.cache/|
+    \.pytest_cache/|
+    \.mypy_cache/|
+    \.ruff_cache/|
+    civicpulse_debug\.log$
+  )
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -23,6 +37,7 @@ repos:
     hooks:
       - id: bandit
         args: ["-r", "src"]
+        pass_filenames: false
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.4
     hooks:

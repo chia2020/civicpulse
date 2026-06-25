@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
 venv/
 .streamlit/secrets.toml
 /storage/
@@ -9,3 +12,4 @@ streamlit.err.log
 streamlit.out.log
 PIPELINE.md
 PROJECT_ARCHITECTURE.md
+checklist.txt

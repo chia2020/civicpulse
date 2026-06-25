@@ -8,14 +8,14 @@ from urllib.parse import urlencode
 
 import streamlit as st
 
+from src.core.state import BackgroundJob
+
 # Configure logging to a file to capture errors even if UI goes black
 logging.basicConfig(
     filename="civicpulse_debug.log",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
-
-from src.core.state import BackgroundJob
 
 _CACHED_LOAD_ISSUES = None
 GHMC_GRIEVANCE_URL = "https://greenhyderabad.ghmc.gov.in/GrievanceRegistration.aspx"
@@ -280,10 +280,13 @@ def render_sidebar() -> None:
         def render_refresh_status() -> None:
             job = BackgroundJob.get_data()
             if job["status"] == "running":
-                timeout_seconds = get_int_env(
-                    "CIVICPULSE_SCRAPE_TOTAL_TIMEOUT_SECONDS",
-                    45,
-                ) + 10
+                timeout_seconds = (
+                    get_int_env(
+                        "CIVICPULSE_SCRAPE_TOTAL_TIMEOUT_SECONDS",
+                        45,
+                    )
+                    + 10
+                )
                 if job["elapsed"] > timeout_seconds:
                     BackgroundJob.fail(
                         f"Live scrape exceeded {timeout_seconds}s. "

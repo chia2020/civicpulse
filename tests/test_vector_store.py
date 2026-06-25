@@ -37,10 +37,7 @@ class FakeSupabaseClient:
                 return [{"id": row["id"]} for row in rows]
             if select == "document":
                 return [{"document": row["document"]} for row in rows]
-            return [
-                {"document": row["document"], "embedding": row["embedding"]}
-                for row in rows
-            ]
+            return [{"document": row["document"], "embedding": row["embedding"]} for row in rows]
 
         if method == "DELETE":
             self.rows.clear()

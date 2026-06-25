@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Final
 
-
 WEIGHTS: Final[dict[str, float]] = {
     "S": 0.30,
     "F": 0.25,

@@ -1,28 +1,32 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 from pathlib import Path
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from src.config import load_environment
 
-
 DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
 CACHE_PATH = Path("storage/locality_cache.json")
+LOGGER = logging.getLogger(__name__)
 
 
 def _load_cache() -> dict[str, str]:
     if not CACHE_PATH.exists():
         return {}
     try:
-        with open(CACHE_PATH, "r") as f:
-            return json.load(f)
+        with open(CACHE_PATH) as f:
+            data = json.load(f)
     except Exception:
         return {}
+    if not isinstance(data, dict):
+        return {}
+    return {str(key): str(value) for key, value in data.items()}
 
 
 def _save_to_cache(text: str, locality: str) -> None:
@@ -30,13 +34,13 @@ def _save_to_cache(text: str, locality: str) -> None:
     # Use a simple normalized version of text as key to avoid massive keys
     key = re.sub(r"[^a-zA-Z0-9]", "", text.lower())[:100]
     cache[key] = locality
-    
+
     try:
         CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
         with open(CACHE_PATH, "w") as f:
             json.dump(cache, f, indent=2)
-    except Exception:
-        pass
+    except Exception as exc:
+        LOGGER.warning("Could not write locality cache: %s", exc)
 
 
 async def ainfer_hyderabad_locality(text: str, timeout_seconds: int = 12) -> str | None:
@@ -62,7 +66,7 @@ async def ainfer_hyderabad_locality(text: str, timeout_seconds: int = 12) -> str
         temperature=0,
         max_tokens=24,
         timeout=timeout_seconds,
-        google_api_key=api_key
+        google_api_key=api_key,
     )
 
     try:
@@ -74,7 +78,7 @@ async def ainfer_hyderabad_locality(text: str, timeout_seconds: int = 12) -> str
     locality = re.sub(r"[^A-Za-z0-9 &./'-]", "", locality).strip(" .")
     if not locality or locality.upper() == "UNKNOWN":
         return None
-        
+
     _save_to_cache(text, locality)
     return locality
 
@@ -102,7 +106,7 @@ def infer_hyderabad_locality(text: str, timeout_seconds: int = 12) -> str | None
         temperature=0,
         max_tokens=24,
         timeout=timeout_seconds,
-        google_api_key=api_key
+        google_api_key=api_key,
     )
 
     try:
@@ -114,6 +118,6 @@ def infer_hyderabad_locality(text: str, timeout_seconds: int = 12) -> str | None
     locality = re.sub(r"[^A-Za-z0-9 &./'-]", "", locality).strip(" .")
     if not locality or locality.upper() == "UNKNOWN":
         return None
-        
+
     _save_to_cache(text, locality)
     return locality

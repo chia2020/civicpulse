@@ -3,14 +3,15 @@ from __future__ import annotations
 from src.core.scoring import calculate_impact_score
 from src.geo.hyderabad import resolve_locality
 
-
 RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
     {
         "id": "HYD-001",
         "title": "Open manhole near Mehdipatnam flyover",
         "area": "Mehdipatnam flyover",
         "category": "Drainage",
-        "description": "Residents report an uncovered manhole near the bus stop after repeated complaints.",
+        "description": (
+            "Residents report an uncovered manhole near the bus stop after repeated complaints."
+        ),
         "source": "r/hyderabad",
         "post_date": "2026-05-11",
         "traction_date": "2026-05-24",
@@ -25,7 +26,9 @@ RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
         "title": "Kukatpally metro road potholes",
         "area": "Kukatpally metro",
         "category": "Roads",
-        "description": "Multiple commuters flagged deep potholes along the metro corridor service road.",
+        "description": (
+            "Multiple commuters flagged deep potholes along the metro corridor service road."
+        ),
         "source": "Telangana Today",
         "post_date": "2026-05-18",
         "traction_date": "2026-05-19",
@@ -40,7 +43,9 @@ RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
         "title": "LB Nagar drinking water disruption",
         "area": "LB Nagar",
         "category": "Water",
-        "description": "Apartment clusters report low pressure and intermittent supply for several days.",
+        "description": (
+            "Apartment clusters report low pressure and intermittent supply for several days."
+        ),
         "source": "Local RSS",
         "post_date": "2026-05-21",
         "traction_date": "2026-05-28",
@@ -70,7 +75,9 @@ RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
         "title": "Secunderabad street lighting outage",
         "area": "Secunderabad",
         "category": "Street Lighting",
-        "description": "Several street lights are out near the station approach road, raising safety concerns.",
+        "description": (
+            "Several street lights are out near the station approach road, raising safety concerns."
+        ),
         "source": "r/hyderabad",
         "post_date": "2026-05-23",
         "traction_date": "2026-05-25",
@@ -85,7 +92,9 @@ RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
         "title": "Malakpet monsoon drain choking",
         "area": "Malakpet",
         "category": "Drainage",
-        "description": "Residents warn that desilting has not happened before expected monsoon showers.",
+        "description": (
+            "Residents warn that desilting has not happened before expected monsoon showers."
+        ),
         "source": "The Hindu Hyderabad",
         "post_date": "2026-05-08",
         "traction_date": "2026-05-27",
@@ -98,6 +107,13 @@ RAW_SAMPLE_ISSUES: list[dict[str, object]] = [
 ]
 
 
+def _to_float(value: object, default: float = 0.0) -> float:
+    try:
+        return float(str(value))
+    except (TypeError, ValueError):
+        return default
+
+
 def build_sample_issues() -> list[dict[str, object]]:
     issues = []
     for item in RAW_SAMPLE_ISSUES:
@@ -108,11 +124,11 @@ def build_sample_issues() -> list[dict[str, object]]:
         issue["longitude"] = locality.longitude
         issue["P"] = locality.population_density_score
         issue["impact_score"] = calculate_impact_score(
-            float(issue["S"]),
-            float(issue["F"]),
-            float(issue["R"]),
-            float(issue["D"]),
-            float(issue["P"]),
+            _to_float(issue["S"]),
+            _to_float(issue["F"]),
+            _to_float(issue["R"]),
+            _to_float(issue["D"]),
+            _to_float(issue["P"]),
         )
         issues.append(issue)
     return issues
