@@ -83,6 +83,8 @@ TRANSLATIONS = {
         "translated_title": "Translated Title",
         "translated_desc": "Translated Description",
         "show_english": "Show English",
+        "remove_duplicates": "Remove Duplicates",
+        "duplicates_removed": "Deduplication done: removed {count} duplicate issues.",
     },
     "te": {
         "title": "సివిక్ పల్స్ (CivicPulse)",
@@ -107,7 +109,7 @@ TRANSLATIONS = {
         "direction": "దిశ",
         "descending": "అవరోహణ",
         "ascending": "ఆరోహణ",
-        "report_new_issue": "కొత్త సమస్యను నివేదించండి",
+        "report_new_issue": "కొత్త సమస్యను నిവേదించండి",
         "issue_cat": "సమస్య వర్గం",
         "loc_landmark": "ప్రాంతం / మైలురాయి",
         "issue_desc": "సమస్య వివరణ",
@@ -155,6 +157,8 @@ TRANSLATIONS = {
         "translated_title": "అనువదించబడిన శీర్షిక",
         "translated_desc": "అనువదించబడిన వివరణ",
         "show_english": "ఇంగ్లీష్ చూపించు",
+        "remove_duplicates": "నకిలీలను తొలగించు",
+        "duplicates_removed": "నకిలీలు తొలగించబడ్డాయి: {count} నకిలీ సమస్యలు తొలగించబడ్డాయి.",
     }
 }
 

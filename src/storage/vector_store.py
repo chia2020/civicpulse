@@ -288,6 +288,84 @@ class CivicVectorStore:
             headers={"Prefer": "resolution=merge-duplicates,return=minimal"},
         )
 
+    def delete_issues(self, ids: list[str]) -> None:
+        """Delete multiple issues in bulk using PostgREST's `in` filter."""
+        if not ids:
+            return
+        chunk_size = 50
+        for i in range(0, len(ids), chunk_size):
+            chunk = ids[i : i + chunk_size]
+            ids_str = ",".join(chunk)
+            self.client.request(
+                "DELETE",
+                self.table_name,
+                params={"id": f"in.({ids_str})"},
+                headers={"Prefer": "return=minimal"},
+            )
+
+    def deduplicate_existing(self) -> int:
+        """Find and remove duplicate rows in Supabase, keeping the highest quality per group.
+
+        Returns the number of deleted duplicate issues.
+        """
+        df = self.fetch_all()
+        if df.empty:
+            return 0
+
+        # Helper columns for sorting priority
+        df["_is_unknown_zone"] = df["zone"].apply(lambda z: 1 if str(z).strip().lower() == "unknown" else 0)
+        df["_has_no_url"] = df["source_url"].apply(lambda u: 1 if not str(u).strip() else 0)
+        df["_impact_score"] = df["impact_score"].apply(lambda x: _to_float(x, 0.0))
+
+        to_delete = set()
+
+        # PASS 1: Group by source_url (only for non-empty URLs starting with http)
+        df_url = df[df["source_url"].str.strip().str.startswith("http", na=False)].copy()
+        if not df_url.empty:
+            df_url_sorted = df_url.sort_values(
+                by=["source_url", "_impact_score", "_is_unknown_zone", "_has_no_url"],
+                ascending=[True, False, True, True]
+            )
+            seen_urls = set()
+            for _, row in df_url_sorted.iterrows():
+                url = row["source_url"].strip().lower()
+                issue_id = str(row["id"])
+                if url in seen_urls:
+                    to_delete.add(issue_id)
+                else:
+                    seen_urls.add(url)
+
+        # PASS 2: Group by normalized (title, post_date, source)
+        df_remaining = df[~df["id"].astype(str).isin(to_delete)].copy()
+
+        def get_text_key(row):
+            title = str(row.get("title") or "").lower().strip()
+            title_norm = " ".join(title.split())
+            post_date = str(row.get("post_date") or "").strip()
+            source = str(row.get("source") or "").lower().strip()
+            return f"{title_norm[:80]}|{post_date}|{source}"
+
+        df_remaining["_text_key"] = df_remaining.apply(get_text_key, axis=1)
+
+        df_text_sorted = df_remaining.sort_values(
+            by=["_text_key", "_impact_score", "_is_unknown_zone", "_has_no_url"],
+            ascending=[True, False, True, True]
+        )
+        seen_text_keys = set()
+        for _, row in df_text_sorted.iterrows():
+            key = row["_text_key"]
+            issue_id = str(row["id"])
+            if key in seen_text_keys:
+                to_delete.add(issue_id)
+            else:
+                seen_text_keys.add(key)
+
+        to_delete_list = list(to_delete)
+        if to_delete_list:
+            self.delete_issues(to_delete_list)
+
+        return len(to_delete_list)
+
     def clear(self) -> None:
         self.client.request(
             "DELETE",
@@ -295,3 +373,4 @@ class CivicVectorStore:
             params={"id": "not.is.null"},
             headers={"Prefer": "return=minimal"},
         )
+

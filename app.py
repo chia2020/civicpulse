@@ -444,6 +444,18 @@ def render_sidebar() -> None:
             trigger_background_refresh()
             st.toast(t("refreshing_live_feed", "Refreshing live feed..."))
 
+        if st.button(f"🗑️ {t('remove_duplicates')}", use_container_width=True,
+                     help="Remove duplicate issues from Supabase database"):
+            with st.spinner(t("updating_dashboard")):
+                try:
+                    store = CivicVectorStore()
+                    removed = store.deduplicate_existing()
+                    st.success(t("duplicates_removed").format(count=removed))
+                    st.cache_data.clear()
+                    st.session_state["dashboard_df"] = None
+                except Exception as err:
+                    st.error(f"Deduplication failed: {err}")
+
         if st.button("🔍 Enrich Unknown Zones", use_container_width=True,
                      help="Use AI to retroactively geocode records with Unknown zone/location"):
             with st.spinner("Enriching Unknown-zone records via AI..."):
@@ -498,18 +510,28 @@ def _inject_global_styles() -> None:
     lang = st.session_state.get("language", "en")
     next_lang = "te" if lang == "en" else "en"
     next_label = "తెలుగు" if lang == "en" else "EN"
+
+    # Define dynamic font stack prioritizing Telugu fonts when language is "te"
+    if lang == "te":
+        font_stack = "'Noto Sans Telugu', 'Nirmala UI', 'Gautami', 'Telugu Sangam MN', 'Lohit Telugu', 'Kedage', 'Pothana2000', sans-serif"
+    else:
+        font_stack = "'Inter', 'Noto Sans Telugu', 'Nirmala UI', 'Gautami', sans-serif"
+
     st.markdown(
-        """
+        f"""
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
-          /* Apply Telugu-capable font stack site-wide */
-          html, body, [class*="css"] {
-            font-family: 'Inter', 'Noto Sans Telugu', sans-serif !important;
-          }
+          /* Apply language-specific font stack site-wide */
+          html, body, [class*="css"] {{
+            font-family: {font_stack} !important;
+          }}
+          :lang(te) {{
+            font-family: 'Noto Sans Telugu', 'Nirmala UI', 'Gautami', 'Telugu Sangam MN', 'Lohit Telugu', 'Kedage', 'Pothana2000', sans-serif !important;
+          }}
           /* Floating language toggle button */
-          #lang-fab {
+          #lang-fab {{
             position: fixed;
             top: 3.6rem;
             right: 1.1rem;
@@ -528,12 +550,15 @@ def _inject_global_styles() -> None:
             gap: 0.35rem;
             text-decoration: none;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
-          }
-          #lang-fab:hover {
+          }}
+          #lang-fab:hover {{
             transform: translateY(-2px);
             box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-          }
+          }}
         </style>
+        <script>
+          document.documentElement.setAttribute('lang', '{lang}');
+        </script>
         """,
         unsafe_allow_html=True,
     )

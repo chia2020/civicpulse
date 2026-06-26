@@ -146,10 +146,13 @@ async def run_live_pipeline(
         store.clear()
     store.upsert_issues(issues)
 
+    # Deduplicate existing and newly added items in Supabase
+    deleted_count = store.deduplicate_existing()
+
     total_time = time.time() - start_time
     print(
         f"Pipeline: Scraped in {scrape_time:.2f}s, processed {len(issues)} issues "
-        f"in {process_time:.2f}s. Total: {total_time:.2f}s"
+        f"in {process_time:.2f}s. Deduplicated {deleted_count} issues. Total: {total_time:.2f}s"
     )
 
     return pd.DataFrame(issues)
