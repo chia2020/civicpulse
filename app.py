@@ -15,6 +15,7 @@ import pandas as pd
 from src.core.state import BackgroundJob
 from src.core.translator import TRANSLATIONS, translate_text
 from src.core.ai_triage import estimate_issue_parameters
+from src.core.enrichment import enrich_missing_locations
 from src.geo.ai_location import infer_hyderabad_locality
 from src.geo.hyderabad import resolve_locality
 from src.core.scoring import calculate_impact_score, urgency_colors, urgency_label
@@ -443,6 +444,20 @@ def render_sidebar() -> None:
             trigger_background_refresh()
             st.toast(t("refreshing_live_feed", "Refreshing live feed..."))
 
+        if st.button("🔍 Enrich Unknown Zones", use_container_width=True,
+                     help="Use AI to retroactively geocode records with Unknown zone/location"):
+            with st.spinner("Enriching Unknown-zone records via AI..."):
+                try:
+                    result = enrich_missing_locations()
+                    st.success(
+                        f"Enrichment done: checked {result['checked']}, "
+                        f"updated {result['updated']}, failed {result['failed']}"
+                    )
+                    st.cache_data.clear()
+                    st.session_state["dashboard_df"] = None
+                except Exception as enrich_err:
+                    st.error(f"Enrichment failed: {enrich_err}")
+
         if "last_refresh_notice" in st.session_state:
             count, duration = st.session_state["last_refresh_notice"]
             st.success(t("refreshed_msg").format(count=count, duration=duration))
@@ -477,6 +492,68 @@ def render_sidebar() -> None:
         render_refresh_status()
 
 
+def _inject_global_styles() -> None:
+    """Inject Google Fonts (Noto Sans Telugu for Unicode rendering) and the
+    floating language-toggle button into every page load."""
+    lang = st.session_state.get("language", "en")
+    next_lang = "te" if lang == "en" else "en"
+    next_label = "తెలుగు" if lang == "en" else "EN"
+    st.markdown(
+        """
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+          /* Apply Telugu-capable font stack site-wide */
+          html, body, [class*="css"] {
+            font-family: 'Inter', 'Noto Sans Telugu', sans-serif !important;
+          }
+          /* Floating language toggle button */
+          #lang-fab {
+            position: fixed;
+            top: 3.6rem;
+            right: 1.1rem;
+            z-index: 9999;
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+          }
+          #lang-fab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+          }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    # Floating button – uses a query-param trick to trigger a language switch
+    # without a form submission (pure HTML, works in deployed Streamlit too).
+    current_url_params = st.query_params.to_dict()
+    current_url_params["set_lang"] = next_lang
+    fab_html = (
+        f"<a id='lang-fab' href='?set_lang={next_lang}' title='Switch language'>🌐 {next_label}</a>"
+    )
+    st.markdown(fab_html, unsafe_allow_html=True)
+
+    # Handle ?set_lang= query param written by the FAB
+    qp_lang = st.query_params.get("set_lang")
+    if qp_lang in ("en", "te") and qp_lang != lang:
+        st.session_state["language"] = qp_lang
+        st.query_params.clear()
+        st.rerun()
+
+
 def main() -> None:
     st.set_page_config(
         page_title="CivicPulse",
@@ -484,6 +561,7 @@ def main() -> None:
         layout="wide",
     )
     logging.info("app.py: Starting execution...")
+    _inject_global_styles()
 
     if apply_completed_refresh(BackgroundJob.get_data()):
         st.rerun()

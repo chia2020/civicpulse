@@ -91,7 +91,7 @@ The objective is to transition CivicPulse into a robust civic-tech project by le
 * **Structured Data Access (Open API):** Provide an authenticated, rate-limited public API endpoint allowing local urban planners, researchers, and journalists to pull aggregated, anonymized civic trends. This drives developer adoption and positions CivicPulse as the authoritative infrastructure intelligence ledger.
 
 ---
-q
+
 ## Success Metrics
 
 | Metric | Week 1 Target | Week 6 Target | Post-Growth Target (6 Months) |

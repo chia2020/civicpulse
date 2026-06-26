@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import math
 import os
 from collections.abc import Iterable
@@ -16,6 +17,7 @@ from src.config import load_environment
 
 EMBEDDING_DIMENSIONS = 128
 DEFAULT_TABLE_NAME = "issues"
+LOGGER = logging.getLogger(__name__)
 
 
 class MissingSupabaseConfig(RuntimeError):
@@ -235,6 +237,56 @@ class CivicVectorStore:
             params={"select": "id"},
         )
         return len(rows or [])
+
+    def fetch_unknown_zone_records(self) -> pd.DataFrame:
+        """Return all records whose zone column is Unknown or whose lat/lon are 0.0."""
+        rows = self.client.request(
+            "GET",
+            self.table_name,
+            params={
+                "select": "document",
+                "zone": "eq.Unknown",
+            },
+        )
+        return pd.DataFrame([row["document"] for row in rows or []])
+
+    def patch_issue(self, issue_id: str, updates: dict[str, object]) -> None:
+        """Patch the JSON document and selected top-level columns for a single issue.
+
+        ``updates`` is a flat dict of issue fields to merge into the stored document.
+        Only the keys present in ``updates`` are changed; all other fields are preserved.
+        """
+        # Fetch existing document first
+        rows = self.client.request(
+            "GET",
+            self.table_name,
+            params={"select": "document", "id": f"eq.{issue_id}"},
+        )
+        if not rows:
+            LOGGER.warning("patch_issue: id=%s not found", issue_id)
+            return
+
+        existing: dict[str, object] = dict(rows[0]["document"])
+        existing.update(updates)
+
+        record: dict[str, object] = {
+            "id": issue_id,
+            "document": existing,
+            "embedding": embed_text(_searchable_text(existing)),
+            "impact_score": _to_float(existing.get("impact_score", 0.0)),
+            "post_date": str(existing.get("post_date", "")),
+            "traction_date": str(existing.get("traction_date", "")),
+            "zone": str(existing.get("zone", "Unknown")),
+            "category": str(existing.get("category", "Uncategorized")),
+            "source": str(existing.get("source", "unknown")),
+        }
+        self.client.request(
+            "POST",
+            self.table_name,
+            params={"on_conflict": "id"},
+            payload=[record],
+            headers={"Prefer": "resolution=merge-duplicates,return=minimal"},
+        )
 
     def clear(self) -> None:
         self.client.request(
